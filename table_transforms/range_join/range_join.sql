@@ -42,6 +42,6 @@ FROM {{ source_table }} as t1
 {{ join_type + ' ' if join_type else '' | upper }}JOIN {{ join_table }} as t2
 {%- for t1_join_col, t2_join_col in join_columns.items() %}
 {{ ' AND' if not loop.first else 'ON'}} t1.{{ t1_join_col }} = t2.{{ t2_join_col }}
-AND t1.{{ achor_date_col }} > t2.{{ start_date_col }} AND t1.{{ achor_date_col }} <= t2.{{ end_date_col }}
+AND t1.{{ achor_date_col }} > t2.{{ start_date_col }} AND t1.{{ achor_date_col }} <= COALESCE(t2.{{ end_date_col }},'2999-12-31')
 {%- endfor -%}
 """
