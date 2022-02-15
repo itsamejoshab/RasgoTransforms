@@ -1,0 +1,38 @@
+name: range_join
+description:  "Join a source table with another join table based on certain join keys between table, as well as satisfying a range condition where a date in the main table falls in between two dates in the join_table **NOTE**: For columns in the Join table with the same name in the source table, only the columns from the join table will be included in the output. "
+arguments:
+  join_table:
+    type: table
+    description: Dataset object to join with the source dataset.
+  join_type:
+    type: join_type
+    description: "'LEFT','RIGHT', 'INNER', or None"
+  join_columns:
+    type: join_dict
+    description: Columns to use for the join. Keys are columns in the source_table and values are on columns in the join_table.
+  anchor_date_col:
+    type: column
+    description: Column in main table that is used as an achor date
+  start_date_col:
+    type: column
+    description: Column in join_table that indicates the beginning of the join range
+  end_date_col:
+    type: column
+    description: Column in the join_table that indicates the end of the join range
+
+example_code: |
+  source_ds = rasgo.get.dataset()
+  join_ds = rasgo.get.dataset()
+
+  source_ds.transform(
+    transform_name='range_join',
+    join_table=join_ds,
+    join_type='LEFT',
+    join_columns={
+      'CUSTOMERID':'CUSTOMERID',
+      'REGIONID':'REGIONID'
+    },
+    anchor_date_col='SOURCE_OBS_DATE',
+    start_date_col='EFFECTIVE_START_DATE',
+    end_date_col='EFFECTIVE_END_DATE'
+  ).preview()
